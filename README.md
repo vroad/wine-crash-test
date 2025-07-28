@@ -16,14 +16,16 @@ The crash only occurs when the development shell is **impure** (use `--impure`).
 Segmentation fault (core dumped)
 ```
 
-Depending on which environment variables are set before running `nix develop`, the failure may also not appear.
+Depending on which environment variables are set before running `nix develop`, the failure may not appear.
 I could not reproduce the issue in a pure shell created with `nix develop -i`.
 
 ## Environment variables related issue?
 
 My environment variables dumped with `nix develop -c bash -c 'declare -px > env.sh`: https://gist.github.com/vroad/6e668513430025f9c376e63840ab1772
 
-In my case, removing variables that contains long values fixes the issue, but I have no idea why. For example, I could not reproduce the issue with the commands that
+However, sourcing the dumped env.sh won't reproduce the same issue. The only way to reproduce the issue is running wine under the `nix develop` shell.
+
+In my case, removing variables that contains long values fixes the issue, but I have no idea why. For example, I could not reproduce the issue with the commands that very long environment variables:
 
 ```bash
 L=20000; for i in {1..30}; do export VAR$i="$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c $L)"; done
