@@ -31,21 +31,14 @@ L=20000; for i in {1..30}; do export VAR$i="$(tr -dc 'A-Za-z0-9' </dev/urandom |
 
 ## Inspecting the dump with `coredumpctl`
 
-Systemd stores a core dump that can be listed with:
+Systemd stores a core dump each time the crash happens.
+You can read the newest dump with:
 
 ```bash
-coredumpctl --since '1 minutes ago'
+coredumpctl info
 ```
 
-Example output:
-
-```
-TIME                           PID  UID GID SIG     COREFILE EXE                                                                           SIZE
-Fri 2025-07-25 18:21:37 JST 195556 1000 100 SIGSEGV present  /nix/store/plf20lkzn7xhbq92n2qxb3p7r7pjivym-wine64-10.0/bin/wine64-preloader 26.3K
-```
-
-More details about a particular dump can be retrieved with:
-
+To inspect an older dump, pass its PID:
 ```bash
 coredumpctl info 195556
 ```
